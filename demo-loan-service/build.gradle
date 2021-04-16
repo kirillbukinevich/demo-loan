@@ -1,0 +1,44 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'demo-loan-service'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation group: 'org.keycloak', name: 'keycloak-spring-boot-starter', version: '12.0.4'
+	implementation group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '3.0.0.CR1', ext: 'pom'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.7'
+	runtimeOnly 'mysql:mysql-connector-java'
+	
+	compileOnly("org.springframework.boot:spring-boot-devtools")
+	compileOnly 'org.projectlombok:lombok:1.18.12'
+ 	implementation group: 'log4j', name: 'log4j', version: '1.2.17'
+	
+	annotationProcessor 'org.projectlombok:lombok:1.18.12'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.12'
+  	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+test {
+	useJUnitPlatform()
+}

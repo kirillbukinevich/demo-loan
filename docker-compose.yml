@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+        - 3306:3306
+    volumes:
+      - server-mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: server
+    networks:
+      - spring-cloud-network
+
+  keycloak:
+    image: jboss/keycloak
+    container_name: keycloak
+    restart: on-failure
+    volumes:
+      - ./config:/config/
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: server
+      DB_USER: root
+      DB_PASSWORD: secret
+      KEYCLOAK_USER: xxx
+      KEYCLOAK_PASSWORD: yyy
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    networks:
+      - spring-cloud-network
+
+
+networks:
+    spring-cloud-network:
+        driver: bridge
+        
+volumes:
+    server-mysql-data:
