@@ -32,7 +32,7 @@ public class LoanService {
     return this.convertToDto(loanDAO.getOne(id));
   }
 
-  public Loan saveOfUpdateLoan(@RequestBody Loan loan) {
+  public Loan saveOrUpdateLoan(@RequestBody Loan loan) {
     return loanDAO.save(loan);
   }
 

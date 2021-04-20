@@ -40,9 +40,9 @@ public class LoanController {
   }
 
   @PostMapping("/save-or-update")
-  public ResponseEntity<Loan> saveOfUpdateLoan(@RequestBody Loan loan) {
+  public ResponseEntity<Loan> saveOrUpdateLoan(@RequestBody Loan loan) {
     log.info("save-or-update loan: " + loan);
-    return ResponseEntity.ok(loanService.saveOfUpdateLoan(loan));
+    return ResponseEntity.ok(loanService.saveOrUpdateLoan(loan));
   }
 
   @DeleteMapping("/delete/{id}")
