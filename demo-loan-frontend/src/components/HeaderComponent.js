@@ -1,17 +1,6 @@
 import React, { Component } from 'react'
-import LoanService from '../services/LoanService'
 
 class HeaderComponent extends Component {
-    constructor(props) {
-        super(props)
-        LoanService.getLogin().then((res) => {
-            console.log(res);
-        });
-
-        this.state = {
-                 
-        }
-    }
 
     render() {
         return (

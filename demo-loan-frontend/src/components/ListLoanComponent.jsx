@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import LoanService from '../services/LoanService'
+import { withKeycloak } from '@react-keycloak/web'
+import { withRouter } from 'react-router-dom'
 
 class ListLoanComponent extends Component {
     constructor(props) {
@@ -14,7 +16,9 @@ class ListLoanComponent extends Component {
     }
 
     deleteLoan(id){
-        LoanService.deleteLoan(id).then( res => {
+        const { keycloak } = this.props
+
+        LoanService.deleteLoan(id, keycloak.token).then( res => {
             this.setState({loans: this.state.loans.filter(loan => loan.id !== id)});
         });
     }
@@ -22,8 +26,10 @@ class ListLoanComponent extends Component {
         this.props.history.push(`/add-loan/${id}`);
     }
 
-    componentDidMount(){     
-        LoanService.getLoans().then((res) => {
+    async componentDidMount(){   
+        const { keycloak } = this.props
+        
+        LoanService.getLoans(keycloak.token).then((res) => {
             console.log(Array.isArray(res.data));
             if(Array.isArray(res.data)) {
                 this.setState({ loans: res.data});
@@ -89,4 +95,4 @@ class ListLoanComponent extends Component {
     }
 }
 
-export default ListLoanComponent
+export default withRouter(withKeycloak(ListLoanComponent))

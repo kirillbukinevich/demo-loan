@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import LoanService from '../services/LoanService';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { withKeycloak } from '@react-keycloak/web'
+import { withRouter } from 'react-router-dom'
 
 class CreateLoanComponent extends Component {
     constructor(props) {
@@ -20,11 +22,12 @@ class CreateLoanComponent extends Component {
 
 
     componentDidMount() {
-
+        const { keycloak } = this.props
+        
         if (this.state.id === '_add') {
             return
         } else {
-            LoanService.getLoanById(this.state.id).then((res) => {
+            LoanService.getLoanById(this.state.id, keycloak.token).then((res) => {
                 console.log(res);
                 console.log(res.data);
                 let loan = res.data;
@@ -45,6 +48,8 @@ class CreateLoanComponent extends Component {
         }
     }
     saveOrUpdateLoan = (e) => {
+        const { keycloak } = this.props
+        
         e.preventDefault();
         if (this.state.id === '_add') {
             this.state.id = 0;
@@ -53,7 +58,7 @@ class CreateLoanComponent extends Component {
             startDate: this.state.startDate, endDate: this.state.endDate };
         console.log('loan => ' + JSON.stringify(loan));
 
-        LoanService.saveOrUpdateLoan(loan).then(res => {
+        LoanService.saveOrUpdateLoan(loan, keycloak.token).then(res => {
             this.props.history.push('/loans');
         });
 
@@ -150,4 +155,4 @@ class CreateLoanComponent extends Component {
     }
 }
 
-export default CreateLoanComponent
+export default withRouter(withKeycloak(CreateLoanComponent))
