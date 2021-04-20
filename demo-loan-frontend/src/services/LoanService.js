@@ -21,8 +21,17 @@ class LoanService {
         })
     }
 
-    saveOrUpdateLoan(loan, token) {
-        return instance.post(config.url.API_BASE_URL + '/api/loan/save-or-update', loan, {
+    saveLoan(loan, token) {
+        return instance.post(config.url.API_BASE_URL + '/api/loan', loan, {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': bearerAuth(token)
+            }
+        })
+    }
+
+    updateLoan(loan, token) {
+        return instance.put(config.url.API_BASE_URL + '/api/loan', loan, {
             headers: {
                 'Content-type': 'application/json',
                 'Authorization': bearerAuth(token)
@@ -31,7 +40,7 @@ class LoanService {
     }
 
     deleteLoan(loanId, token) {
-        return instance.delete(config.url.API_BASE_URL + '/api/loan/delete/' + loanId, {
+        return instance.delete(config.url.API_BASE_URL + '/api/loan/' + loanId, {
             headers: { 'Authorization': bearerAuth(token) }
         })
     }

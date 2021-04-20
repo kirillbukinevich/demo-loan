@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import demo.loan.dao.LoanDAO;
 import demo.loan.dto.LoanDTO;
@@ -28,15 +26,15 @@ public class LoanService {
     return result;
   }
 
-  public LoanDTO getLoanById(@PathVariable Long id) {
+  public LoanDTO getLoanById(Long id) {
     return this.convertToDto(loanDAO.getOne(id));
   }
 
-  public Loan saveOrUpdateLoan(@RequestBody Loan loan) {
+  public Loan saveLoan(Loan loan) {
     return loanDAO.save(loan);
   }
 
-  public void deleteLoanById(@PathVariable Long id) {
+  public void deleteLoanById(Long id) {
     loanDAO.deleteById(id);
   }
 

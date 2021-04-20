@@ -15,15 +15,15 @@ class CreateLoanComponent extends Component {
             amount: '',
             interest: '',
             startDate: '',
-			endDate: ''
+            endDate: ''
         }
-        
+
     }
 
 
     componentDidMount() {
         const { keycloak } = this.props
-        
+
         if (this.state.id === '_add') {
             return
         } else {
@@ -31,8 +31,8 @@ class CreateLoanComponent extends Component {
                 console.log(res);
                 console.log(res.data);
                 let loan = res.data;
-                if(!loan.name) {
-                    window.location.href = 'http://localhost:8081/login'; 
+                if (!loan.name) {
+                    window.location.href = 'http://localhost:8081/login';
                 }
                 console.log(loan);
                 console.log(this.convertStringDateToDate(loan.startDate));
@@ -49,26 +49,34 @@ class CreateLoanComponent extends Component {
     }
     saveOrUpdateLoan = (e) => {
         const { keycloak } = this.props
-        
+
         e.preventDefault();
         if (this.state.id === '_add') {
             this.state.id = 0;
         }
-        let loan = { id: this.state.id,  name: this.state.name, amount: this.state.amount, interest: this.state.interest, 
-            startDate: this.state.startDate, endDate: this.state.endDate };
+        let loan = {
+            id: this.state.id, name: this.state.name, amount: this.state.amount, interest: this.state.interest,
+            startDate: this.state.startDate, endDate: this.state.endDate
+        };
         console.log('loan => ' + JSON.stringify(loan));
 
-        LoanService.saveOrUpdateLoan(loan, keycloak.token).then(res => {
-            this.props.history.push('/loans');
-        });
+        if (this.state.id === 0) {
+            LoanService.saveLoan(loan, keycloak.token).then(res => {
+                this.props.history.push('/loans');
+            });
+        } else {
+            LoanService.updateLoan(loan, keycloak.token).then(res => {
+                this.props.history.push('/loans');
+            });
+        }
 
     }
 
-     convertStringDateToDate = (date) => {
+    convertStringDateToDate = (date) => {
         let splittedDate = date.split(".");
         console.log(splittedDate)
-        return new Date(splittedDate[2],--splittedDate[1],splittedDate[0],);
-        }
+        return new Date(splittedDate[2], --splittedDate[1], splittedDate[0],);
+    }
 
     changeNameHandler = (event) => {
         this.setState({ name: event.target.value });
@@ -130,15 +138,15 @@ class CreateLoanComponent extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label> Start date: </label>
-                                        <br/>
-                                        <DatePicker dateFormat="dd.MM.yyyy" placeholder="Start date" name="startDate" className="form-control" 
-                                            selected={this.state.startDate} onChange={date =>this.changeStartDateHandler(date)} />
+                                        <br />
+                                        <DatePicker dateFormat="dd.MM.yyyy" placeholder="Start date" name="startDate" className="form-control"
+                                            selected={this.state.startDate} onChange={date => this.changeStartDateHandler(date)} />
                                     </div>
                                     <div className="form-group">
                                         <label> End date: </label>
-                                        <br/>
-                                        <DatePicker dateFormat="dd.MM.yyyy" placeholder="End date" name="endDate" className="form-control" 
-                                            selected={this.state.endDate} onChange={date =>this.changeEndDateHandler(date)} />
+                                        <br />
+                                        <DatePicker dateFormat="dd.MM.yyyy" placeholder="End date" name="endDate" className="form-control"
+                                            selected={this.state.endDate} onChange={date => this.changeEndDateHandler(date)} />
                                     </div>
 
 

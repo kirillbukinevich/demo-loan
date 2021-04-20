@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import demo.loan.dao.LoanDAO;
 import demo.loan.model.Loan;
-import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -29,38 +28,58 @@ public class LoanTests {
     private TestEntityManager entityManager;
 
     @Test
-    public void testGetAllLoans(){
-    	Loan loan = new Loan(999999999998L,"Test",BigDecimal.ONE,3.2,new Date(),new Date());
-    	Loan loan2 = new Loan(999999999999L,"Test2",BigDecimal.ONE,5.2,new Date(),new Date());
-        
-    	loanDAO.save(loan);
-    	loanDAO.save(loan2);
-
+    public void getAllLoans(){
+    	Loan loan = new Loan(0L,"Test",BigDecimal.ONE,3.2,new Date(),new Date());
+    	Loan loan2 = new Loan(0L,"Test2",BigDecimal.ONE,5.2,new Date(),new Date());
+    	
+    	entityManager.persist(loan);
+    	entityManager.persist(loan2);
+    	entityManager.flush();
+    	
         Assert.assertNotNull(loanDAO.findAll());
     }
     
     @Test
-    public void testGetLoanById(){
-    	Loan loan = new Loan(999999999998L,"Test",BigDecimal.ONE,3.2,new Date(),new Date());
-    	Loan loan2 = new Loan(999999999999L,"Test2",BigDecimal.ONE,5.2,new Date(),new Date());
+    public void getLoanById(){
+    	Loan loan = new Loan(0L,"Test",BigDecimal.ONE,5.2,new Date(),new Date());
         
-    	loanDAO.save(loan);
-    	loanDAO.save(loan2);
-
-    	loanDAO.findById(999999999999L)
+    	Long id = entityManager.persistAndGetId(loan, Long.class);
+    	entityManager.flush();
+    	
+    	loanDAO.findById(id)
                 .map(newLoan ->{
-                   Assert.assertSame(5.2,newLoan.getInterest());
+                   Assert.assertEquals(5.2,newLoan.getInterest(),0.001);
                    return true;
                 });
     }
     
     @Test
-    public void testSaveLoan(){
-        Loan loan = new Loan(999999999999L,"Test",BigDecimal.ONE,3.2,new Date(),new Date());
-        loanDAO.save(loan);
-        loanDAO.findById(999999999999L).map(
+    public void saveLoan(){
+        Loan loan = new Loan(0L,"Test",BigDecimal.ONE,3.2,new Date(),new Date());
+        loan = loanDAO.saveAndFlush(loan);
+        loanDAO.findById(loan.getId()).map(
         		newLoan -> {
                     Assert.assertEquals("Test",newLoan.getName());
+                    return true;
+        		});
+    }
+
+    @Test
+    public void updateLoan(){
+        Loan loan = new Loan(0L,"Test",BigDecimal.ONE,3.2,new Date(),new Date());
+        Long id = entityManager.persistAndGetId(loan, Long.class);
+    	entityManager.flush();
+    	
+        Loan loanForUpdate = loanDAO.findById(id).get();
+        loanForUpdate.setName("NewName");
+        
+        entityManager.persist(loanForUpdate);
+    	entityManager.flush();
+    	
+        
+        loanDAO.findById(id).map(
+        		updatedLoan -> {
+                    Assert.assertEquals("NewName",updatedLoan.getName());
                     return true;
         		});
     }

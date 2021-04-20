@@ -1,17 +1,17 @@
 package demo.loan.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.loan.dto.LoanDTO;
@@ -39,18 +39,25 @@ public class LoanController {
     return loanService.getLoanById(id);
   }
 
-  @PostMapping("/save-or-update")
-  public ResponseEntity<Loan> saveOrUpdateLoan(@RequestBody Loan loan) {
-    log.info("save-or-update loan: " + loan);
-    return ResponseEntity.ok(loanService.saveOrUpdateLoan(loan));
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public Loan save(@RequestBody Loan loan) {
+    log.info("save loan: " + loan);
+    return loanService.saveLoan(loan);
   }
-
-  @DeleteMapping("/delete/{id}")
-  public ResponseEntity<Map<String, Boolean>> deleteLoanById(@PathVariable Long id) {
+  
+  @PutMapping
+  @ResponseStatus(HttpStatus.OK)
+  public Loan update(@RequestBody Loan loan) {
+    log.info("update loan: " + loan);
+    return loanService.saveLoan(loan);
+  }
+  
+  
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteLoanById(@PathVariable Long id) {
     log.info("delete:" + id);
     loanService.deleteLoanById(id);
-    Map<String, Boolean> response = new HashMap<>();
-    response.put("deleted", Boolean.TRUE);
-    return ResponseEntity.ok(response);
   }
 }
