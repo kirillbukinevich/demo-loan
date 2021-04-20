@@ -48,9 +48,13 @@ class CreateLoanComponent extends Component {
         }
     }
     saveOrUpdateLoan = (e) => {
+        e.preventDefault();
+        if(!this.isFormValid()) {
+            return;
+        }
+
         const { keycloak } = this.props
 
-        e.preventDefault();
         if (this.state.id === '_add') {
             this.state.id = 0;
         }
@@ -71,6 +75,14 @@ class CreateLoanComponent extends Component {
         }
 
     }
+
+    isFormValid = () => {
+        if(this.state.name && this.state.amount && this.state.interest && this.state.startDate && this.state.endDate) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     convertStringDateToDate = (date) => {
         let splittedDate = date.split(".");
