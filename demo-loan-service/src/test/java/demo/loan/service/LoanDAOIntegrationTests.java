@@ -19,7 +19,7 @@ import demo.loan.model.Loan;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class LoanTests {
+public class LoanDAOIntegrationTests {
 
     @Autowired
     private LoanDAO loanDAO;

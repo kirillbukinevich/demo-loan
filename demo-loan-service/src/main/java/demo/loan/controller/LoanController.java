@@ -43,21 +43,23 @@ public class LoanController {
   @ResponseStatus(HttpStatus.CREATED)
   public Loan save(@RequestBody Loan loan) {
     log.info("save loan: " + loan);
-    return loanService.saveLoan(loan);
+    loanService.saveLoan(loan);
+    return loan;
   }
   
   @PutMapping
   @ResponseStatus(HttpStatus.OK)
   public Loan update(@RequestBody Loan loan) {
     log.info("update loan: " + loan);
-    return loanService.saveLoan(loan);
+    loanService.saveLoan(loan);
+    return loan;
   }
   
   
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public void deleteLoanById(@PathVariable Long id) {
-    log.info("delete:" + id);
+    log.info("delete loan with id:" + id);
     loanService.deleteLoanById(id);
   }
 }
