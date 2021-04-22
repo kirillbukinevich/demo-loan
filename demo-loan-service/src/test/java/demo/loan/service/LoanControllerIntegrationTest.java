@@ -31,7 +31,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.tngtech.keycloakmock.junit5.KeycloakMockExtension;
 
 import demo.loan.config.SecurityConfig;
-import demo.loan.dto.LoanDTO;
+import demo.loan.dto.LoanDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
@@ -77,9 +77,9 @@ public class LoanControllerIntegrationTest {
 
   @Test
   public void whenCallingLoansEndpoint_thenReturnAllLoans() {
-    List<LoanDTO> loanList = new ArrayList<LoanDTO>();
-    loanList.add(new LoanDTO(1, "Test", BigDecimal.ONE, 3.2, "12.12.2018", "12.12.2018", 0, 0));
-    loanList.add(new LoanDTO(2, "Test2", BigDecimal.ONE, 5.2, "12.12.2018", "12.12.2018", 0, 0));
+    List<LoanDto> loanList = new ArrayList<LoanDto>();
+    loanList.add(new LoanDto(1, "Test", BigDecimal.ONE, 3.2, "12.12.2018", "12.12.2018", 0, 0));
+    loanList.add(new LoanDto(2, "Test2", BigDecimal.ONE, 5.2, "12.12.2018", "12.12.2018", 0, 0));
     when(loanService.getAllLoans()).thenReturn(loanList);
 
     given()
@@ -95,7 +95,7 @@ public class LoanControllerIntegrationTest {
         .assertThat()
         .body("size()", is(2));
 
-    LoanDTO[] loans =
+    LoanDto[] loans =
         given()
             .auth()
             .preemptive()
@@ -109,14 +109,14 @@ public class LoanControllerIntegrationTest {
             .then()
             .statusCode(200)
             .extract()
-            .as(LoanDTO[].class);
+            .as(LoanDto[].class);
     assertThat(loans.length).isEqualTo(2);
   }
 
   @Test
   public void givenLoanId_whenMakingGetRequestToLoanEndpoint_thenReturnLoan() {
 
-    LoanDTO testLoan = new LoanDTO(1, "Test", BigDecimal.ONE, 3.2, "", "", 0, 0);
+    LoanDto testLoan = new LoanDto(1, "Test", BigDecimal.ONE, 3.2, "", "", 0, 0);
 
     when(loanService.getLoanById(1L)).thenReturn(testLoan);
 
@@ -141,7 +141,7 @@ public class LoanControllerIntegrationTest {
         .body("days", notNullValue())
         .body("daysLeft", notNullValue());
 
-    LoanDTO result =
+    LoanDto result =
         given()
             .auth()
             .preemptive()
@@ -157,7 +157,7 @@ public class LoanControllerIntegrationTest {
             .assertThat()
             .statusCode(HttpStatus.OK.value())
             .extract()
-            .as(LoanDTO.class);
+            .as(LoanDto.class);
     assertThat(result).usingRecursiveComparison().isEqualTo(testLoan);
 
     String responseString =

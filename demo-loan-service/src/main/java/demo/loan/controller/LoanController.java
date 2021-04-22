@@ -2,6 +2,8 @@ package demo.loan.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import demo.loan.dto.LoanDTO;
+import demo.loan.dto.LoanDto;
 import demo.loan.model.Loan;
 import demo.loan.service.LoanService;
 import lombok.extern.log4j.Log4j2;
@@ -27,21 +29,21 @@ public class LoanController {
   @Autowired private LoanService loanService;
 
   @GetMapping
-  public List<LoanDTO> getAllLoans() {
+  public List<LoanDto> getAllLoans() {
     log.info("find all loan");
-    List<LoanDTO> result = loanService.getAllLoans();
+    List<LoanDto> result = loanService.getAllLoans();
     return result;
   }
 
   @GetMapping("/{id}")
-  public LoanDTO getLoanById(@PathVariable Long id) {
+  public LoanDto getLoanById(@PathVariable Long id) {
     log.info("getLoanBy Id: " + id);
     return loanService.getLoanById(id);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Loan save(@RequestBody Loan loan) {
+  public Loan save(@Valid @RequestBody Loan loan) {
     log.info("save loan: " + loan);
     loanService.saveLoan(loan);
     return loan;

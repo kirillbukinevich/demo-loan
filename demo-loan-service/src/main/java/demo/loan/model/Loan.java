@@ -9,11 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -32,22 +32,23 @@ public class Loan {
   private long id;
 
   @Column(name = "NAME")
-  @NonNull
+  @NotNull(message = "Name is mandatory")
   private String name;
   
   @Column(name = "AMOUNT")
-  @NonNull
+  @NotNull(message = "Amount is mandatory")
   private BigDecimal amount;
   
   @Column(name = "INTEREST")
+  @NotNull(message = "Interest is mandatory")
   private double interest;
 
   @Column(name = "START_DATE")
-  @NonNull
+  @NotNull(message = "Start date is mandatory")
   private Date startDate;
 
   @Column(name = "END_DATE")
-  @NonNull
+  @NotNull(message = "End date is mandatory")
   private Date endDate;
 
 }

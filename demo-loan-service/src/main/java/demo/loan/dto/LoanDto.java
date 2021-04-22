@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanDTO {
+public class LoanDto {
 
   private long id;
   private String name;
